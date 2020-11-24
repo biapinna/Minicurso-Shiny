@@ -299,6 +299,7 @@ server = function(input, output){
 ```
 
 
+---
 
 ### Regra 2
 
