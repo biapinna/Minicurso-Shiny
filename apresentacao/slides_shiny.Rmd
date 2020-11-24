@@ -97,10 +97,10 @@ class: center, middle, toc
 ---
 class: middle, center
 
+
 ```{r, out.width="100%", fig.align='center', fig.cap="<center><b>Ilustração por Allison Horst - Twitter: <a href='https://twitter.com/allison_horst/'> @allison_horst</a> </b></center>"}
 knitr::include_graphics("figs/horst-eco-r4ds.png")
 ```
-
 
 ---
 ## Passos para instalação
