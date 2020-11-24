@@ -1,0 +1,12 @@
+name: curriculo_exemplo
+title: curriculo_exemplo
+username:
+account: beatrizshiny
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3294211
+bundleId: 3899618
+url: https://beatrizshiny.shinyapps.io/curriculo_exemplo/
+when: 1606223432.32961
+asMultiple: FALSE
+asStatic: FALSE

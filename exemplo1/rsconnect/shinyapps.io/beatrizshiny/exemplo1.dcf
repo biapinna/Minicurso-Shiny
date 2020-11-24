@@ -5,8 +5,8 @@ account: beatrizshiny
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3291873
-bundleId: 3897680
+bundleId: 3901172
 url: https://beatrizshiny.shinyapps.io/exemplo1/
-when: 1606181879.14994
+when: 1606247173.57481
 asMultiple: FALSE
 asStatic: FALSE
