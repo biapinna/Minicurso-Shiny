@@ -1,0 +1,12 @@
+name: exemplo1
+title: exemplo1
+username:
+account: beatrizshiny
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3291873
+bundleId: 3897680
+url: https://beatrizshiny.shinyapps.io/exemplo1/
+when: 1606181879.14994
+asMultiple: FALSE
+asStatic: FALSE

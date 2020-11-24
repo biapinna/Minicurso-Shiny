@@ -1,0 +1,12 @@
+name: exemplo_mtcars
+title: exemplo_mtcars
+username:
+account: beatrizshiny
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3294463
+bundleId: 3899756
+url: https://beatrizshiny.shinyapps.io/exemplo_mtcars/
+when: 1606225803.58077
+asMultiple: FALSE
+asStatic: FALSE

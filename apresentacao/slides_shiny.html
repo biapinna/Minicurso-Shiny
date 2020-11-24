@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Introdução a Dashboards no R com o pacote shiny</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Beatriz Pinna" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introdução a Dashboards no R com o pacote shiny
+### Beatriz Pinna
+### 24 novembro 2020
+
+---
+
+
+
+
+background-image: 
+background-position: top right
+background-size: 110px 110px
+layout: true
+
+---
+
+
+## sobre
+
+- estatística formada pela ENCE;
+
+- mestranda em estatística na UFRJ e assistente de pesquisa no IPEA;
+
+- usuária de R desde 2016;
+
+- Participante da [**.orange[@RLadiesRio]**](https://www.instagram.com/rladiesrio/) e do [**.orange[@RioemDados]**](https://www.instagram.com/rioemdados/). 
+
+
+
+
+---
+background-image: url(figs/shinyR.png)
+background-size: 150px 150px
+background-position: 80% 65%
+
+## sobre hoje
+
+
+__1. por que shiny?__
+
+
+__2. estrutura__
+
+
+__3. criando meu primeiro app__
+
+
+__4. hospedando seu app no shinyapps.io__
+
+
+__5. desafio__
+
+
+---
+class: center, middle, toc
+# __1. por que shiny?__
+
+---
+## motivos para usar shiny
+
+- Shiny é um sistema de desenvolvimento de aplicações web interativas que utiliza o software R e que não querer conhecimento de HTML, CSS, JavaScript.
+--
+
+
+- O código de uma aplicação shiny nos permite programar a interface do usuário e a lógica da aplicação (servidor);
+--
+
+
+- Shiny não é apenas uma ferramenta para criar Dashboards. Podemos utilizar essa aplicação web para ensinar conceitos estatísticos, usar e visualizar modelos estatísticos e explorar dados ou criar relatórios.
+
+
+---
+class: middle, center
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/horst-eco-r4ds.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Ilustração por Allison Horst - Twitter: &amp;lt;a href='https://twitter.com/allison_horst/'&amp;gt; @allison_horst&amp;lt;/a&amp;gt; &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="100%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Ilustração por Allison Horst - Twitter: &lt;a href='https://twitter.com/allison_horst/'&gt; @allison_horst&lt;/a&gt; &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+## passos para instalação
+
++ Primeiro instale o pacote shiny no seu computador:
+
+
+```r
+install.packages("shiny")
+```
+--
+
+
++ em seguida, precisamos carregar o pacote shiny: 
+
+
+```r
+library(shiny)
+```
+--
+
+
+
+
+---
+class: center, middle
+# __2. estrutura__
+
+---
+
+## introdução
+
+
+ Um app em shiny pode ser gerado por um único script chamado app.R. Esse script tem três componentes:
+--
+
++ criação da UI;
+--
+
+
++ estabelecimento do server; e
+--
+
+
++ união de UI e server no shiny.
+--
+
+---
+
++ estrutura básica do app shiny
+
+
+```r
+library(shiny)
+
+ui = fluidPage()
+
+server = function(input, output){}
+
+shinyApp(ui = ui, server = server)
+```
+
++ Informações básicas [aqui](https://shiny.rstudio.com/tutorial/).
+
+
+&lt;!--ui: funções escritas em R para construir a interface em HTML que será exibida para o usuário \\ The user interface (ui) object controls the layout and appearance of your app--&gt;
+
+&lt;!--server: função que recebe os inputs de ui, trabalha as informações e retorna outputs para a ui \\ The server function contains the instructions that your computer needs to build your app--&gt;
+
+&lt;!-- O server pode ser o próprio computador rodando uma sessão do RStudio ou um servidor de fato processando os dados e enviando o resultado para o App pela internet. A vantagem do primeiro é não depender de conexão para conseguir realizar a apresentação, ao de ter que arcar com o processsamento local de toda a informação que for requerida pela App.
+--&gt;
+
+&lt;!-- Finally the shinyApp function creates Shiny app objects from an explicit UI/server pair --&gt;
+
+&lt;!-- Os usuários interagem com a interface web (UI). A UI envia comandos em R para o servidor (server) que retorna resultados para o usuário novamente na UI.--&gt;
+
+---
+
+## interface com o usuário  
+
++ O objeto `ui` contém todas as funções escritas em R para construir a interface exibida para o usuário em HTML, ou seja, esse objeto controla o layout e a aparência do app.
+--
+
+
++ A função `fluidPage()` declarada no `ui` é utilizada para criar um display que ajusta as dimensões da janela do navegador do usuário. 
+--
+&lt;!--Os elementos da interface do usuário são então colocados dentro dessa função --&gt;
+
+---
+
+
+
+```r
+ui &lt;- fluidPage(
+  titlePanel("Título"),
+
+  sidebarLayout(
+    sidebarPanel("Painel lateral"),
+    mainPanel("Painel principal")
+  )
+)
+```
+
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/ui_geral.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Interface gerada pelo objeto UI acima &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="100%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Interface gerada pelo objeto UI acima &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;!-- As funções titlePanel() e sidebarLayout() são os argumentos da função fluidPage(). A primeira gera o título “Título”, enquanto a segunda estrutura um layout com barra lateral para o app.
+
+A função sidebarLayout() recebe dois argumentos:
+
+sidebarPanel() - estrutura o painel na barra lateral; e
+mainPanel() - estrutura o painel principal.
+
+Essa é uma das estruturas mais simples e populares para a interface de usuário de um Shiny app.
+
+Note que nós criamos apenas títulos e painéis. Não há nada com o que o usuário possa interagir. Para isso, precisamos adicionar os inputs. --&gt;
+
+
+---
+## design de base input-output
+
++ O input de um app shiny são as combinações de opções realizadas pelo usuário na UI e o output pode ser um gráfico, data frames, tabelas, textos, imagens, etc a ser apresentado para aquele input. As funções de `*Input()` e `*Output()` são colocadas dentro do `fluidPage()` do UI.
+--
+
+### inputs
+
++ Um exemplo de função de input é um objeto "slider".
+
+
+```r
+sliderInput(inputId = "num",
+            label = "Escolha um número",
+            value = 25, min = 1, max = 100)
+```
+--
+
+---
+
+
+```r
+sliderInput(inputId = "num",
+            label = "Escolha um número",
+            value = 25, min = 1, max = 100)
+```
+
+
++ Ao rodar este comando, o shiny transforma esta função em um código em HTML para gerar um slider na página da UI.
+--
+
+
++ Toda função de input possui um argumento `inputId` para identificação interna e um argumento `label` que nomeia o objeto na UI. Outros argumentos são típicos de cada função de input e deve-se usar o comando `?sliderInput` caso exista alguma dúvidas dos parâmetros utilizados em cada função.
+
+
+
+&lt;!-- 
+Na prática, inputs são widgets que possibilitam a interação do usuário com o app. Eles recebem um valor escolhido pelo usuário e o envia para o server side. 
+
+Repare que a função sliderInput() recebe alguns argumentos. O mais importante é o inputId=. Esse argumento definirá o nome que usaremos para chamar esse input dentro do server. O argumento label= recebe o texto que aparecerá no widget, ajudando o usuário a entender o que o input controla. 
+
+Cada input terá argumentos específicos da própria função.
+
+--&gt;
+
+---
+
++ Há diversas funções de input como:
+--
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/shinyinput.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplos de funções de input &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="90%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplos de funções de input &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;!-- Agora que já sabemos como enviar objetos para o server side, vamos ver como receber as suas saídas.
+--&gt;
+
+---
+
+### outputs
+
++ Um exemplo de função de output é um gráfico.
+
+
+```r
+plotOutput(outputId = "hist")
+```
+--
+
+
++ Toda função de output possui um argumento `outputId` para identificação interna. O código do gráfico ou do output desejado não entra aqui, somente é necessário especificar o nome do objeto de output. Isto porque tudo o que o shiny faz neste campo do `fluidPage()` é reservar um campo e separar o tipo de objeto que entrará neste campo, sabendo que o objeto terá o nome estipulado pelo `outputId` e chamando-o pelo server.
+
+&lt;!--Isso quer dizer que vamos receber um output do tipo “plot” (gráfico) do servidor e colocá-lo dentro do mainPanel()--&gt;
+
+---
+
++ Há diversas funções de output como:
+--
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/shinyoutput.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplos de funções de output&amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="90%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplos de funções de output&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;!--Criados os inputs e outputs do app, agora precisamos manipulá-los no server side. Vamos ver como fazer isso.--&gt;
+---
+## transformando input em output no servidor
+
+Para criar a função de servidor devemos seguir __3 regras__:
+--
+
+
+### regra 1
+
++ Salve os objetos que serão exibidos como `output$&lt;outputId&gt;`. 
+--
+
+
++ Por exemplo, como estabelecemos no exemplo anterior um `outputId` com o nome "hist". Assim, para criá-lo usamos:
+
+
+```r
+server = function(input, output){
+  output$hist = "Insira o código para criar o histograma aqui"
+}
+```
+
+&lt;!-- Com a interface do usuário estruturada, precisamos agora implementar a função server(). Nela, colocaremos as instruções para gerar os outputs que nós vemos no user side a partir dos valores dos inputs que o usuário escolher.
+
+A primeira coisa que precisamos fazer é defini-la. A função server() será sempre uma função que recebe dois argumentos: input e output--&gt;
+---
+
+### regra 2
+
++ Construa os objetos a serem exibidos com a função `render*()`. 
+--
+
+
++ Por exemplo, para criar um gráfico devemos usar:
+
+
+```r
+server = function(input, output){
+  output$hist = renderPlot({})
+}
+```
+
+
+---
+
++ Há diversas funções de `render*()` como:
+--
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/renderfunctions.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplos de funções de render*()&amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="90%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplos de funções de render*()&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+---
+
++ Logo, podemos usar como exemplo um gráfico do tipo histograma de uma distribuição normal.
+--
+
+
+```r
+server = function(input, output){
+  output$hist = renderPlot({ hist(rnorm(100)) })
+}
+```
+
++ Atente que o conteúdo do `renderPlot()` está entre *chaves* `{}`, isto porque é um código autônomo e pode ter quantas linhas quanto necessário. O importante é a saída deste código que estará dentro das chaves, não importando o pacote utilizado para construí-lo.
+
+&lt;!--O argumento dessas funções será sempre um bloco de código, usado para gerar o output desejado. Repare que para gerar o histograma, utilizamos a função renderPlot() 
+
+Repare nas {} dentro da função renderPlot(). Elas permitem que qualquer estrutura de código possa ser passada como argumento. Podemos então pular linhas e indentar nosso código normalmente dentro das funções render_().--&gt;
+
+---
+
+### regra 3
+
++ Use valores de input com `input$&lt;inputId&gt;`. 
+--
+
+
++ Este valor do input é importante porque ele muda sempre que o usuário alterar os parâmetros na UI. Por exemplo, como estabelecemos no exemplo anterior um `inputId` com o nome "num", então para utilizar este input:
+--
+
+
+
+```r
+server = function(input, output){
+  output$hist = renderPlot({ hist(rnorm(input$num)) })
+}
+```
+
+
++ Usar o `input$&lt;inputId&gt;` é o que permite a *reatividade*. Sempre que você usar um valor de input para produzir um objeto de output no shiny em que o output dependa deste input, então ocorrerá reatividade.
+
+&lt;!--Sempre que você usar um input dentro de uma função render_(), o seu output se tornará reativo ao valor do input. Isso significa que, sempre que o usuário mudar o valor do input, o Shiny atualizará automaticamente o valor dentro da lista e também todas as funções render_() que dependam dele.
+
+No nosso exemplo, sempre que o usuário mudar o número de amostras no slider, o aplicativo atualizará o valor de input$num e rodará novamente o código dentro da função renderPlot(). Assim, o objeto output$hist será atualizado.
+
+A reatividade é um princípio essencial dentro do Shiny, e saber usá-la é primordial para que o aplicativo funcione corretamente e de forma eficiente. A seguir, exploraremos mais a fundo esse conceito e apresentaremos funções que auxiliam a manipular a reatividade
+--&gt;
+
+
+---
+
+## exemplo simples
+
+.pull-left[
+
+```r
+library(shiny)
+
+ui &lt;- fluidPage(
+  sliderInput(inputId = "num", 
+    label = "Escolha um número", 
+    value = 25, min = 1, max = 100),
+  plotOutput("hist")
+)
+
+server &lt;- function(input, output) {
+  output$hist &lt;- renderPlot({
+    hist(rnorm(input$num))
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+]
+
+
+.pull-right[
+![](slides_shiny_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## funcionamento de um app shiny
+
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/fluxo_shiny.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Ilustração por Chanin Nantasenamat&amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="90%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Ilustração por Chanin Nantasenamat&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+class: center, middle
+# __3. criando meu primeiro app__
+
+---
+
+## criando o app shiny no Rstudio
+
++ No RStudio para criar um aplicativo shiny vá em: 
+
+File -&gt; New File -&gt; Shiny Web App
+--
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/newshiny.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Criando uma nova aplicação em shiny &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Criando uma nova aplicação em shiny &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+
+Interface do usuário
+
+```yaml
+# This is a Shiny web application. You can run the application by clicking
+# the 'Run App' button above.
+# Find out more about building applications with Shiny here:
+#    http://shiny.rstudio.com/
+
+library(shiny)
+
+# Define UI for application that draws a histogram
+ui &lt;- fluidPage(
+
+    # Application title
+    titlePanel("Old Faithful Geyser Data"),
+
+    # Sidebar with a slider input for number of bins 
+    sidebarLayout(
+        sidebarPanel(
+            sliderInput("bins",
+                        "Number of bins:",
+                        min = 1,
+                        max = 50,
+                        value = 30)
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+           plotOutput("distPlot")
+        )
+    )
+)
+```
+---
+class: middle, center
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/ui_ex1.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplo 1: interface do usuário &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplo 1: interface do usuário &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+---
+class: middle, center
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/input_ex1.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplo 1: input &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplo 1: input &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+---
+Servidor
+
+```yaml
+# Define server logic required to draw a histogram
+server &lt;- function(input, output) {
+
+    output$distPlot &lt;- renderPlot({
+        # generate bins based on input$bins from ui.R
+        x    &lt;- faithful[, 2]
+        bins &lt;- seq(min(x), max(x), length.out = input$bins + 1)
+
+        # draw the histogram with the specified number of bins
+        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
+```
+
+---
+class: middle, center
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/server_ex1.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplo 1: output &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplo 1: output &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+---
+class: middle, center
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/code_ex1.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Exemplo 1: server &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Exemplo 1: server &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+class: center, middle
+# __4. hospedando seu app no shinyapps.io__
+
+---
++ Para salvar o seu app em um servidor, você deve colocar todos os arquivos que o app precisa em um único diretório contando o `app.R` e o dataset, imagens, .css, scripts etc. *Necessariamente* o nome deve ser `app.R`. Isto porque o servidor irá procurar no diretório por este nome de arquivo.
+--
+
+
++ Em versões anteriores, o código estaria dividido em dois, um `ui.R` e um `server.R`, cada um contendo uma parcela dos comandos, de modo que o `ui.R` contaria diretamente com a função `fluidPage()` e o `server.R` com a `function()` que construímos para produção dos output. Atualmente isto não é mais necessário e tudo pode estar unificado no `app.R`.
+--
+
+
+---
+
++ Ou seja, usando o exemplo anterior teríamos dois arquivos desta maneira:
+--
+
+
+
+```r
+#ui.R
+library(shiny)
+
+fluidPage(
+  sliderInput(inputId = "num", 
+              label = "Escolha um número", 
+              value = 25, min = 1, max = 100),
+  plotOutput("hist")
+)
+```
+
+
+
+```r
+#server.R
+library(shiny)
+
+function(input, output) {
+  output$hist &lt;- renderPlot({
+    hist(rnorm(input$num))
+    })
+  }
+```
+
+---
+
++ Ainda é útil separar desta maneira caso o seu app seja muito grande, com centenas de linhas de código na UI e no Server. Perceba que neste caso não foi necessário usar a função `shinyApp()`.
+--
+
+
++ Caso deseje construir o app desta maneira, separando em dois arquivos, então salve cada um *necessariamente* com os nomes `server.R` e `ui.R`, em um mesmo diretório como dito anteriormente. A única diferença será termos dois arquivos .R com estes nomes ao invés de um único arquivo `app.R`.
+
+---
+
+## utilizando o shinyapps.io
+
++ O serviço básico para hospedar aplicativos shiny é o [shinyapps.io](http://www.shinyapps.io/) mantido pelo RStudio. Para utilizá-lo, crie uma conta e utilize o pacote `rsconnect` para ligar o RStudio à conta do shinyapps por um *token*. Assim, ao produzir um app, basta clicar no comando `Publish` no canto superior direito e o shiny hospedará todos os arquivos e dados necessários no site, criando um endereço acessável pela internet.
+--
+
+
++ No shinyapps há opções gratuitas e pagas. A versão gratuita possui uma série de limitações de acesso, tamanho dos aplicativos e números de aplicativos.
+--
+
+
+---
+## passo a passo
+
++ Acesse https://www.shinyapps.io e faça o cadastro;
+--
+
+
++ Instale o pacote rsconnect no seu computador:
+
+
+```r
+install.packages("rsconnect")
+```
+--
+
+
++ Clique em "show secret" e copie as informações;
+--
+
+
++ No RStudio clique no canto superior direito em "Publish Application";
+--
+
+
++ Clique em "Add New Account";
+--
+
+---
+
++ Cole as informações que você copiou aqui:
+
+
+&lt;img src="figs/rshinyapps3.png" width="70%" style="display: block; margin: auto;" /&gt;
+--
+
+---
+
++ Pronto, agora é só esperar o deploy da aplicação:
+
+
+&lt;img src="figs/rshinyapps4.png" width="80%" style="display: block; margin: auto;" /&gt;
+--
+
+
++ https://beatrizshiny.shinyapps.io/exemplo1/
+--
+
+
+---
+
+## Exemplo 2
+
++ Vamos fazer um exemplo utilizando tabelas:
+
+https://beatrizshiny.shinyapps.io/exemplo2/
+
+--
+
+
++ Aqui estamos considerando o dataset *diamonds* do pacote ggplot2;
+--
+
+
++ Esse exemplo é útil quando queremos mostrar resultados no formato de tabelas onde as alterações são interativas;
+--
+
+---
+
++ UI
+--
+
+
+```r
+library(shiny)
+library(ggplot2)  # dataset diamonds 
+
+ui &lt;- fluidPage(
+    titlePanel("Examplo com DataTables"),
+    sidebarLayout(
+        sidebarPanel(
+                checkboxGroupInput("show_vars", "Selecione as colunas que deseja visualizar do dataset diamonds:",
+                                   names(diamonds), selected = names(diamonds))
+        ),
+        mainPanel(
+            tabsetPanel(
+                id = 'dataset',
+                tabPanel("diamonds", DT::dataTableOutput("mytable1"))
+            )
+        )
+    )
+)
+```
+
+---
+
++ Server
+
+
+
+```r
+server &lt;- function(input, output) {
+    
+    # selecione as colunas para mostrar
+    diamonds2 = diamonds[sample(nrow(diamonds), 1000), ]
+    output$mytable1 &lt;- DT::renderDataTable({
+        DT::datatable(diamonds2[, input$show_vars, drop = FALSE])
+    })
+    
+    
+}
+
+shinyApp(ui, server)
+```
+--
+
+
++ Agora faça utilizando outro dataset, por exemplo, o dataset *mtcars* do prórpio R.
+--
+
+
++ https://beatrizshiny.shinyapps.io/exemplo_mtcars/
+
+---
+class: center, middle
+# __5. desafio__
+
+
+---
+
+## customizando a aparência
+
++ A UI do app é feita em HTML. E o que a função `fluidPage()` faz é traduzir uma série de comandos em HTML seguindo um template padrão. Tal qual é possível melhorar a UI com o próprio shiny, pois o pacote ofereça várias alternativas e métodos para aperfeiçoar e customizar o app.
+--
+
+
++ Quando estamos escrevendo com o R, podemos adicionar conteúdo com funções de *marcação*.  [aqui](https://shiny.rstudio.com/articles/tag-glossary.html).
+
+---
+
++ Há diversas funções de tags como:
+--
+
+
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figs/tagscomuns.png" alt="&amp;lt;center&amp;gt;&amp;lt;b&amp;gt;Tags mais comuns &amp;lt;/b&amp;gt;&amp;lt;/center&amp;gt;" width="80%" /&gt;
+&lt;p class="caption"&gt;&lt;center&gt;&lt;b&gt;Tags mais comuns &lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+---
+
++ Como exemplo podemos criar o seguinte código:
+
+.pull-left[
+
+```r
+library(shiny)
+
+ui &lt;- fluidPage(
+  h1("My Shiny App"),
+  p(style = "font-family:Impact",
+    "See other apps in the",
+    a("Shiny Showcase",
+      href = "http://www.rstudio.com/products/shiny/shiny-user-showcase/")
+  )
+)
+
+server &lt;- function(input, output){}
+
+shinyApp(ui = ui, server = server)
+```
+]
+
+.pull-right[
+![](slides_shiny_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## dashboard dinâmico no shiny com `shinydashboard`
+
++ Primeiro instale o pacote shinydashboard no seu computador:
+--
+
+
+```r
+install.packages("shinydashboard")
+```
+
++ em seguida, precisamos carregar o pacote shinydashboard:
+--
+
+
+```r
+library(shinydashboard)
+```
+
+---
+
+## estrutura de um *dashboard*
+
+A função `dashboardPage()` espera sempre 3 componentes:
+--
+
+
+1. Um cabeçalho ou *header*;
+--
+
+
+2. Uma barra lateral ou *side bar*;
+--
+
+
+3. Um corpo do app ou *body*.
+--
+
+
+
+```r
+## ui.R ##
+library(shinydashboard)
+
+dashboardPage(
+  dashboardHeader(),
+  dashboardSidebar(),
+  dashboardBody()
+)
+```
+
+---
+
+## exemplo básico
+
+
+.pull-left[
+
+```r
+## app.R ##
+library(shiny)
+library(shinydashboard)
+
+ui &lt;- dashboardPage(
+  dashboardHeader(),
+  dashboardSidebar(),
+  dashboardBody()
+)
+
+server &lt;- function(input, output) { }
+
+shinyApp(ui, server)
+```
+]
+
+
+.pull-right[
+![](slides_shiny_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+]
+
+---
+
++ Para um app mais complicado, dividir o `dashboardPage()` em pedaços discretos é uma boa prática. O código pode ser dividido da seguinte maneira:
+--
+
+
+```r
+header = dashboardHeader()
+
+sidebar = dashboardSidebar()
+
+body = dashboardBody()
+
+dashboardPage(header, sidebar, body)
+```
+
+---
+
+## desafio
+
++ Vimos que com o shiny temos uma gama de opções para criar diversos apps úteis; 
+--
+
+
++ Digamos que você precise criar uma apresentação sobre você para uma vaga de estágio. Vocês acham possível usar o shiny para fazer uma apresentação dinâmica para se destacar?
+--
+
+
++ A resposta é __SIM__!
+--
+
+
++ https://beatrizshiny.shinyapps.io/curriculo/
+--
+
+---
+class: center, middle
+
+# agora é a sua vez!
+https://beatrizshiny.shinyapps.io/curriculo_exemplo/
+
+---
+## para saber mais
+
+- [shiny tutorial](https://shiny.rstudio.com/tutorial/) 
+
+
+- [shinydashboard tutorial](https://rstudio.github.io/shinydashboard/get_started.html)
+
+
+- [shinyapps.io tutorial](https://shiny.rstudio.com/articles/shinyapps.html)
+
+
+- [shiny cheat sheet](https://shiny.rstudio.com/articles/cheatsheet.html)
+
+
+- [material curso-r](https://www.curso-r.com/material/shiny/)
+
+---
+
+background-image: 
+background-position: 80% 95%
+background-size: 220px 240px
+
+class: center, middle
+# __obrigada!__
+
+[@biapinna](https://github.com/biapinna)  
+
+pinnarbeatriz@gmail.com
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
