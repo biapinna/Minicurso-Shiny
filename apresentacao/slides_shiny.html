@@ -27,13 +27,13 @@ layout: true
 ---
 
 
-## sobre
+## Sobre
 
-- estatística formada pela ENCE;
+- Estatística formada pela ENCE;
 
-- mestranda em estatística na UFRJ e assistente de pesquisa no IPEA;
+- Mestranda em estatística na UFRJ e assistente de pesquisa no IPEA;
 
-- usuária de R desde 2016;
+- Usuária de R desde 2016;
 
 - Participante da [**.orange[@RLadiesRio]**](https://www.instagram.com/rladiesrio/) e do [**.orange[@RioemDados]**](https://www.instagram.com/rioemdados/). 
 
@@ -45,32 +45,32 @@ background-image: url(figs/shinyR.png)
 background-size: 150px 150px
 background-position: 80% 65%
 
-## sobre hoje
+## Sobre hoje
 
 
-__1. por que shiny?__
+__1. Por que shiny?__
 
 
-__2. estrutura__
+__2. Estrutura__
 
 
-__3. criando meu primeiro app__
+__3. Criando meu primeiro app__
 
 
-__4. hospedando seu app no shinyapps.io__
+__4. Hospedando seu app no shinyapps.io__
 
 
-__5. desafio__
+__5. Desafio__
 
 
 ---
 class: center, middle, toc
-# __1. por que shiny?__
+# __1. Por que shiny?__
 
 ---
-## motivos para usar shiny
+## Motivos para usar shiny
 
-- Shiny é um sistema de desenvolvimento de aplicações web interativas que utiliza o software R e que não querer conhecimento de HTML, CSS, JavaScript.
+- Shiny é um sistema de desenvolvimento de aplicações web interativas que utiliza o software R e que não querer conhecimento de HTML, CSS, JavaScript;
 --
 
 
@@ -80,6 +80,12 @@ class: center, middle, toc
 
 - Shiny não é apenas uma ferramenta para criar Dashboards. Podemos utilizar essa aplicação web para ensinar conceitos estatísticos, usar e visualizar modelos estatísticos e explorar dados ou criar relatórios.
 
+&lt;!-- para uma customização mais avançada, o pacote shiny permite a interação com outras linguagens
+
+Um Shiny app é uma página web (UI) conectada a um computador/server que esteja rodando uma sessão R (Server)
+
+Os usuários interagem com a interface web (UI). A UI envia comandos em R para o servidor (server) que retorna resultados para o usuário novamente na UI.
+--&gt;
 
 ---
 class: middle, center
@@ -91,7 +97,7 @@ class: middle, center
 
 
 ---
-## passos para instalação
+## Passos para instalação
 
 + Primeiro instale o pacote shiny no seu computador:
 
@@ -102,7 +108,7 @@ install.packages("shiny")
 --
 
 
-+ em seguida, precisamos carregar o pacote shiny: 
++ Em seguida, precisamos carregar o pacote shiny: 
 
 
 ```r
@@ -115,30 +121,30 @@ library(shiny)
 
 ---
 class: center, middle
-# __2. estrutura__
+# __2. Estrutura__
 
 ---
 
-## introdução
+## Introdução
 
 
  Um app em shiny pode ser gerado por um único script chamado app.R. Esse script tem três componentes:
 --
 
-+ criação da UI;
++ Criação da UI;
 --
 
 
-+ estabelecimento do server; e
++ Estabelecimento do server; e
 --
 
 
-+ união de UI e server no shiny.
++ União de UI e server no shiny.
 --
 
 ---
 
-+ estrutura básica do app shiny
++ Estrutura básica do app shiny
 
 
 ```r
@@ -167,7 +173,7 @@ shinyApp(ui = ui, server = server)
 
 ---
 
-## interface com o usuário  
+## Interface com o usuário  
 
 + O objeto `ui` contém todas as funções escritas em R para construir a interface exibida para o usuário em HTML, ou seja, esse objeto controla o layout e a aparência do app.
 --
@@ -213,12 +219,12 @@ Note que nós criamos apenas títulos e painéis. Não há nada com o que o usu�
 
 
 ---
-## design de base input-output
+## Design de base input-output
 
 + O input de um app shiny são as combinações de opções realizadas pelo usuário na UI e o output pode ser um gráfico, data frames, tabelas, textos, imagens, etc a ser apresentado para aquele input. As funções de `*Input()` e `*Output()` são colocadas dentro do `fluidPage()` do UI.
 --
 
-### inputs
+### Inputs
 
 + Um exemplo de função de input é um objeto "slider".
 
@@ -230,6 +236,9 @@ sliderInput(inputId = "num",
 ```
 --
 
+&lt;!--inputId: Nome ao qual iremos obter os valores inputados pelo usuário.
+
+label: Texto a ser exibido.--&gt;
 ---
 
 
@@ -273,7 +282,7 @@ Cada input terá argumentos específicos da própria função.
 
 ---
 
-### outputs
+### Outputs
 
 + Um exemplo de função de output é um gráfico.
 
@@ -286,7 +295,11 @@ plotOutput(outputId = "hist")
 
 + Toda função de output possui um argumento `outputId` para identificação interna. O código do gráfico ou do output desejado não entra aqui, somente é necessário especificar o nome do objeto de output. Isto porque tudo o que o shiny faz neste campo do `fluidPage()` é reservar um campo e separar o tipo de objeto que entrará neste campo, sabendo que o objeto terá o nome estipulado pelo `outputId` e chamando-o pelo server.
 
-&lt;!--Isso quer dizer que vamos receber um output do tipo “plot” (gráfico) do servidor e colocá-lo dentro do mainPanel()--&gt;
+&lt;!--Isso quer dizer que vamos receber um output do tipo “plot” (gráfico) do servidor e colocá-lo dentro do mainPanel()
+
+Para apresentar um objeto do tipo output, basta adicioná-lo ao fluidPage() com uma função do tipo *Output().
+
+outputId: Nome do output que vamos criar em server.R.--&gt;
 
 ---
 
@@ -302,13 +315,14 @@ plotOutput(outputId = "hist")
 
 &lt;!--Criados os inputs e outputs do app, agora precisamos manipulá-los no server side. Vamos ver como fazer isso.--&gt;
 ---
-## transformando input em output no servidor
+
+## Transformando input em output no servidor
 
 Para criar a função de servidor devemos seguir __3 regras__:
 --
 
 
-### regra 1
+### Regra 1
 
 + Salve os objetos que serão exibidos como `output$&lt;outputId&gt;`. 
 --
@@ -328,7 +342,7 @@ server = function(input, output){
 A primeira coisa que precisamos fazer é defini-la. A função server() será sempre uma função que recebe dois argumentos: input e output--&gt;
 ---
 
-### regra 2
+### Regra 2
 
 + Construa os objetos a serem exibidos com a função `render*()`. 
 --
@@ -375,7 +389,7 @@ Repare nas {} dentro da função renderPlot(). Elas permitem que qualquer estrut
 
 ---
 
-### regra 3
+### Regra 3
 
 + Use valores de input com `input$&lt;inputId&gt;`. 
 --
@@ -405,7 +419,7 @@ A reatividade é um princípio essencial dentro do Shiny, e saber usá-la é pri
 
 ---
 
-## exemplo simples
+## Exemplo simples
 
 .pull-left[
 
@@ -436,7 +450,7 @@ shinyApp(ui = ui, server = server)
 
 ---
 
-## funcionamento de um app shiny
+## Funcionamento de um app shiny
 
 
 
@@ -448,15 +462,15 @@ shinyApp(ui = ui, server = server)
 
 ---
 class: center, middle
-# __3. criando meu primeiro app__
+# __3. Criando meu primeiro app__
 
 ---
 
-## criando o app shiny no Rstudio
+## Criando o app shiny no Rstudio
 
 + No RStudio para criar um aplicativo shiny vá em: 
 
-File -&gt; New File -&gt; Shiny Web App
+`File -&gt; New File -&gt; Shiny Web App`
 --
 
 
@@ -559,7 +573,7 @@ class: middle, center
 
 ---
 class: center, middle
-# __4. hospedando seu app no shinyapps.io__
+# __4. Hospedando seu app no shinyapps.io__
 
 ---
 + Para salvar o seu app em um servidor, você deve colocar todos os arquivos que o app precisa em um único diretório contando o `app.R` e o dataset, imagens, .css, scripts etc. *Necessariamente* o nome deve ser `app.R`. Isto porque o servidor irá procurar no diretório por este nome de arquivo.
@@ -612,7 +626,7 @@ function(input, output) {
 
 ---
 
-## utilizando o shinyapps.io
+## Utilizando o shinyapps.io
 
 + O serviço básico para hospedar aplicativos shiny é o [shinyapps.io](http://www.shinyapps.io/) mantido pelo RStudio. Para utilizá-lo, crie uma conta e utilize o pacote `rsconnect` para ligar o RStudio à conta do shinyapps por um *token*. Assim, ao produzir um app, basta clicar no comando `Publish` no canto superior direito e o shiny hospedará todos os arquivos e dados necessários no site, criando um endereço acessável pela internet.
 --
@@ -623,7 +637,7 @@ function(input, output) {
 
 
 ---
-## passo a passo
+## Passo a passo
 
 + Acesse https://www.shinyapps.io e faça o cadastro;
 --
@@ -702,8 +716,10 @@ ui &lt;- fluidPage(
     titlePanel("Examplo com DataTables"),
     sidebarLayout(
         sidebarPanel(
-                checkboxGroupInput("show_vars", "Selecione as colunas que deseja visualizar do dataset diamonds:",
-                                   names(diamonds), selected = names(diamonds))
+                checkboxGroupInput("show_vars", 
+                                   "Selecione as colunas que deseja visualizar do dataset diamonds:",
+                                   names(diamonds), 
+                                   selected = names(diamonds))
         ),
         mainPanel(
             tabsetPanel(
@@ -738,7 +754,7 @@ shinyApp(ui, server)
 --
 
 
-+ Agora faça utilizando outro dataset, por exemplo, o dataset *mtcars* do prórpio R.
++ Agora faça um app utilizando outro dataset, por exemplo, o dataset *mtcars* do prórpio R.
 --
 
 
@@ -746,18 +762,18 @@ shinyApp(ui, server)
 
 ---
 class: center, middle
-# __5. desafio__
+# __5. Desafio__
 
 
 ---
 
-## customizando a aparência
+## Customizando a aparência
 
 + A UI do app é feita em HTML. E o que a função `fluidPage()` faz é traduzir uma série de comandos em HTML seguindo um template padrão. Tal qual é possível melhorar a UI com o próprio shiny, pois o pacote ofereça várias alternativas e métodos para aperfeiçoar e customizar o app.
 --
 
 
-+ Quando estamos escrevendo com o R, podemos adicionar conteúdo com funções de *marcação*.  [aqui](https://shiny.rstudio.com/articles/tag-glossary.html).
++ Quando estamos escrevendo com o R, podemos adicionar conteúdo com funções de *marcação*.  
 
 ---
 
@@ -801,17 +817,18 @@ shinyApp(ui = ui, server = server)
 
 ---
 
-## dashboard dinâmico no shiny com `shinydashboard`
+## Dashboard dinâmico no shiny com `shinydashboard`
 
 + Primeiro instale o pacote shinydashboard no seu computador:
---
 
 
 ```r
 install.packages("shinydashboard")
 ```
+--
 
-+ em seguida, precisamos carregar o pacote shinydashboard:
+
++ Em seguida, precisamos carregar o pacote shinydashboard:
 --
 
 
@@ -821,7 +838,7 @@ library(shinydashboard)
 
 ---
 
-## estrutura de um *dashboard*
+## Estrutura de um *dashboard*
 
 A função `dashboardPage()` espera sempre 3 componentes:
 --
@@ -853,7 +870,7 @@ dashboardPage(
 
 ---
 
-## exemplo básico
+## Exemplo básico
 
 
 .pull-left[
@@ -898,7 +915,7 @@ dashboardPage(header, sidebar, body)
 
 ---
 
-## desafio
+## Desafio
 
 + Vimos que com o shiny temos uma gama de opções para criar diversos apps úteis; 
 --
@@ -918,11 +935,11 @@ dashboardPage(header, sidebar, body)
 ---
 class: center, middle
 
-# agora é a sua vez!
+## Agora é a sua vez!
 https://beatrizshiny.shinyapps.io/curriculo_exemplo/
 
 ---
-## para saber mais
+## Para saber mais
 
 - [shiny tutorial](https://shiny.rstudio.com/tutorial/) 
 
