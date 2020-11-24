@@ -92,12 +92,7 @@ class: center, middle, toc
 
 - Shiny não é apenas uma ferramenta para criar Dashboards. Podemos utilizar essa aplicação web para ensinar conceitos estatísticos, usar e visualizar modelos estatísticos e explorar dados ou criar relatórios.
 
-<!-- para uma customização mais avançada, o pacote shiny permite a interação com outras linguagens
 
-Um Shiny app é uma página web (UI) conectada a um computador/server que esteja rodando uma sessão R (Server)
-
-Os usuários interagem com a interface web (UI). A UI envia comandos em R para o servidor (server) que retorna resultados para o usuário novamente na UI.
--->
 
 ---
 class: middle, center
@@ -168,16 +163,7 @@ shinyApp(ui = ui, server = server)
 + Informações básicas [aqui](https://shiny.rstudio.com/tutorial/).
 
 
-<!--ui: funções escritas em R para construir a interface em HTML que será exibida para o usuário \\ The user interface (ui) object controls the layout and appearance of your app-->
 
-<!--server: função que recebe os inputs de ui, trabalha as informações e retorna outputs para a ui \\ The server function contains the instructions that your computer needs to build your app-->
-
-<!-- O server pode ser o próprio computador rodando uma sessão do RStudio ou um servidor de fato processando os dados e enviando o resultado para o App pela internet. A vantagem do primeiro é não depender de conexão para conseguir realizar a apresentação, ao de ter que arcar com o processsamento local de toda a informação que for requerida pela App.
--->
-
-<!-- Finally the shinyApp function creates Shiny app objects from an explicit UI/server pair -->
-
-<!-- Os usuários interagem com a interface web (UI). A UI envia comandos em R para o servidor (server) que retorna resultados para o usuário novamente na UI.-->
 
 ---
 
@@ -189,7 +175,7 @@ shinyApp(ui = ui, server = server)
 
 + A função `fluidPage()` declarada no `ui` é utilizada para criar um display que ajusta as dimensões da janela do navegador do usuário. 
 --
-<!--Os elementos da interface do usuário são então colocados dentro dessa função -->
+
 
 ---
 
@@ -212,16 +198,6 @@ knitr::include_graphics("figs/ui_geral.png")
 ```
 
 
-<!-- As funções titlePanel() e sidebarLayout() são os argumentos da função fluidPage(). A primeira gera o título “Título”, enquanto a segunda estrutura um layout com barra lateral para o app.
-
-A função sidebarLayout() recebe dois argumentos:
-
-sidebarPanel() - estrutura o painel na barra lateral; e
-mainPanel() - estrutura o painel principal.
-
-Essa é uma das estruturas mais simples e populares para a interface de usuário de um Shiny app.
-
-Note que nós criamos apenas títulos e painéis. Não há nada com o que o usuário possa interagir. Para isso, precisamos adicionar os inputs. -->
 
 
 ---
@@ -241,9 +217,7 @@ sliderInput(inputId = "num",
 ```
 --
 
-<!--inputId: Nome ao qual iremos obter os valores inputados pelo usuário.
 
-label: Texto a ser exibido.-->
 ---
 
 ```{r, echo=TRUE, eval=FALSE}
@@ -261,14 +235,6 @@ sliderInput(inputId = "num",
 
 
 
-<!-- 
-Na prática, inputs são widgets que possibilitam a interação do usuário com o app. Eles recebem um valor escolhido pelo usuário e o envia para o server side. 
-
-Repare que a função sliderInput() recebe alguns argumentos. O mais importante é o inputId=. Esse argumento definirá o nome que usaremos para chamar esse input dentro do server. O argumento label= recebe o texto que aparecerá no widget, ajudando o usuário a entender o que o input controla. 
-
-Cada input terá argumentos específicos da própria função.
-
--->
 
 ---
 
@@ -280,8 +246,7 @@ Cada input terá argumentos específicos da própria função.
 knitr::include_graphics("figs/shinyinput.png")
 ```
 
-<!-- Agora que já sabemos como enviar objetos para o server side, vamos ver como receber as suas saídas.
--->
+
 
 ---
 
@@ -297,11 +262,7 @@ plotOutput(outputId = "hist")
 
 + Toda função de output possui um argumento `outputId` para identificação interna. O código do gráfico ou do output desejado não entra aqui, somente é necessário especificar o nome do objeto de output. Isto porque tudo o que o shiny faz neste campo do `fluidPage()` é reservar um campo e separar o tipo de objeto que entrará neste campo, sabendo que o objeto terá o nome estipulado pelo `outputId` e chamando-o pelo server.
 
-<!--Isso quer dizer que vamos receber um output do tipo “plot” (gráfico) do servidor e colocá-lo dentro do mainPanel()
 
-Para apresentar um objeto do tipo output, basta adicioná-lo ao fluidPage() com uma função do tipo *Output().
-
-outputId: Nome do output que vamos criar em server.R.-->
 
 ---
 
@@ -314,7 +275,7 @@ knitr::include_graphics("figs/shinyoutput.png")
 ```
 
 
-<!--Criados os inputs e outputs do app, agora precisamos manipulá-los no server side. Vamos ver como fazer isso.-->
+
 ---
 
 ## Transformando input em output no servidor
@@ -337,10 +298,7 @@ server = function(input, output){
 }
 ```
 
-<!-- Com a interface do usuário estruturada, precisamos agora implementar a função server(). Nela, colocaremos as instruções para gerar os outputs que nós vemos no user side a partir dos valores dos inputs que o usuário escolher.
 
-A primeira coisa que precisamos fazer é defini-la. A função server() será sempre uma função que recebe dois argumentos: input e output-->
----
 
 ### Regra 2
 
@@ -380,9 +338,6 @@ server = function(input, output){
 
 + Atente que o conteúdo do `renderPlot()` está entre *chaves* `{}`, isto porque é um código autônomo e pode ter quantas linhas quanto necessário. O importante é a saída deste código que estará dentro das chaves, não importando o pacote utilizado para construí-lo.
 
-<!--O argumento dessas funções será sempre um bloco de código, usado para gerar o output desejado. Repare que para gerar o histograma, utilizamos a função renderPlot() 
-
-Repare nas {} dentro da função renderPlot(). Elas permitem que qualquer estrutura de código possa ser passada como argumento. Podemos então pular linhas e indentar nosso código normalmente dentro das funções render_().-->
 
 ---
 
@@ -405,12 +360,6 @@ server = function(input, output){
 
 + Usar o `input$<inputId>` é o que permite a *reatividade*. Sempre que você usar um valor de input para produzir um objeto de output no shiny em que o output dependa deste input, então ocorrerá reatividade.
 
-<!--Sempre que você usar um input dentro de uma função render_(), o seu output se tornará reativo ao valor do input. Isso significa que, sempre que o usuário mudar o valor do input, o Shiny atualizará automaticamente o valor dentro da lista e também todas as funções render_() que dependam dele.
-
-No nosso exemplo, sempre que o usuário mudar o número de amostras no slider, o aplicativo atualizará o valor de input$num e rodará novamente o código dentro da função renderPlot(). Assim, o objeto output$hist será atualizado.
-
-A reatividade é um princípio essencial dentro do Shiny, e saber usá-la é primordial para que o aplicativo funcione corretamente e de forma eficiente. A seguir, exploraremos mais a fundo esse conceito e apresentaremos funções que auxiliam a manipular a reatividade
--->
 
 
 ---
